@@ -32,57 +32,61 @@ def init_objects():
     game_over = Game_Over()
     
     return score, grid, food, snake, game_over
-        
 
-screen, clock = init()
-score, grid, food, snake, game_over = init_objects()
-
-done = False
-is_game_over = False
-paused = False
-
-while not done:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-            done = True
-        elif is_game_over and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            score, grid, food, snake, game_over = init_objects()
-            is_game_over = False
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-            snake.move(Move_Direction.UP)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-            snake.move(Move_Direction.DOWN)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-            snake.move(Move_Direction.LEFT)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-            snake.move(Move_Direction.RIGHT)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            paused = not paused
+def main():
+    screen, clock = init()
+    score, grid, food, snake, game_over = init_objects()
     
-    if not paused:
-        screen.fill(colors.DARK_GREY)
-            
-        if not is_game_over:
-            snake.move(None)
+    done = False
+    is_game_over = False
+    paused = False
     
-            if snake.hit_border_or_body():
-                is_game_over = True
-                score.save()
-                continue
-            
-            if snake.ate(food):
-                food.set_position(snake.snake_pieces)
-                snake.increase_size()
-                score.improve()
-            
-            score.draw(screen)
-            grid.draw_border_only(screen)    
-            food.draw(screen)
-            snake.draw(screen)
-        else:
-            game_over.draw(screen, score.score, score.get_higher_scores())
+    while not done:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                done = True
+            elif is_game_over and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                score, grid, food, snake, game_over = init_objects()
+                is_game_over = False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+                snake.move(Move_Direction.UP)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+                snake.move(Move_Direction.DOWN)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                snake.move(Move_Direction.LEFT)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                snake.move(Move_Direction.RIGHT)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                paused = not paused
         
-        pygame.display.flip()
-        clock.tick(60)
+        if not paused:
+            screen.fill(colors.DARK_GREY)
+                
+            if not is_game_over:
+                snake.move(None)
+        
+                if snake.hit_border_or_body():
+                    is_game_over = True
+                    score.save()
+                    continue
+                
+                if snake.ate(food):
+                    food.set_position(snake.snake_pieces)
+                    snake.increase_size()
+                    score.improve()
+                
+                score.draw(screen)
+                grid.draw_border_only(screen)    
+                food.draw(screen)
+                snake.draw(screen)
+            else:
+                game_over.draw(screen, score.score, score.get_higher_scores())
+            
+            pygame.display.flip()
+            clock.tick(60)
+            
+    quit()
+        
+if __name__ == "__main__":
+    main()
 
-quit()

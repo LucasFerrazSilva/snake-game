@@ -46,4 +46,4 @@ class Food:
         self.__set_blink_frequency()
         
     def __set_blink_frequency(self):
-        self.blink_frequency = 25
+        self.blink_frequency = 15
