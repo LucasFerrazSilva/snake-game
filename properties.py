@@ -1,3 +1,4 @@
+import pygame
 from position import Position
 
 GAME_WINDOW_SIZE = 600
@@ -10,3 +11,7 @@ GAME_WINDOW_START_POSITION = Position(SCORE_SIZE, MARGIN_SIZE)
 GAME_WINDOW_FINAL_POSITION = Position(GAME_WINDOW_START_POSITION.x + GAME_WINDOW_SIZE, GAME_WINDOW_START_POSITION.y + GAME_WINDOW_SIZE)
 
 BLOCK_SIZE = int(GAME_WINDOW_SIZE * 0.05)
+
+SNAKE_SPEED = 7
+
+DIFICULTY_OPTIONS = [pygame.K_1, pygame.K_KP1, pygame.K_2, pygame.K_KP2, pygame.K_3, pygame.K_KP3, pygame.K_4, pygame.K_KP4]

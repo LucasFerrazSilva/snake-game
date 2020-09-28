@@ -106,7 +106,7 @@ class Snake:
         
     
     def __init_speed(self):
-        self.speed = 7
+        self.speed = properties.SNAKE_SPEED
     
     
     def __generate_initial_body(self):        
