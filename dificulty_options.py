@@ -5,3 +5,4 @@ class Dificulty_Options(Enum):
     EASY = 21
     NORMAL = 14
     HARD = 7
+    VERY_HARD = 2

@@ -16,6 +16,12 @@ class Snake:
         self.__generate_initial_body()
         
         self.__init_speed()
+        
+        self.must_increase = False
+        
+        self.moves_index = 0
+        
+        self.first_moves_count = 3
     
     
     
@@ -31,9 +37,20 @@ class Snake:
             self.speed -= 1
             return
         
-        self.__init_speed()        
+        self.__init_speed() 
         
-        next_move_direction = self.snake_pieces[0].move_direction        
+        if self.must_increase:
+            self.increase_size()
+            self.must_increase = False     
+        
+        if properties.LET_SNAKE_PLAY:
+            if self.first_moves_count > 0:
+                self.first_moves_count -= 1
+            else:
+                self.snake_pieces[0].move_direction = properties.MOVES[self.moves_index]
+                self.moves_index = (self.moves_index + 1 if self.moves_index < 35 else 0)
+        
+        next_move_direction = self.snake_pieces[0].move_direction   
         
         for snake_piece in self.snake_pieces:
             if snake_piece.move_direction == Move_Direction.UP:
@@ -85,6 +102,10 @@ class Snake:
     
     def hit_border_or_body(self):
         return self.__hit_border() or self.__hit_body()
+    
+    
+    def beat_the_game(self):
+        return len(self.snake_pieces) == properties.NUMBER_OF_BLOCKS
     
     
         

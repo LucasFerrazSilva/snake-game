@@ -9,6 +9,7 @@ from move_direction import Move_Direction
 from score import Score
 from game_over import Game_Over
 from dificulty_choose_screen import Dificulty_Choose_Screen
+from beat_the_game_message import Beat_The_Game_Message
 
 
 def init():
@@ -32,27 +33,32 @@ def init_objects():
     snake = Snake()
     game_over = Game_Over()
     dificulty_choose = Dificulty_Choose_Screen()
+    beat_the_game_message = Beat_The_Game_Message()
     
-    return score, grid, food, snake, game_over, dificulty_choose
+    food.set_position(snake.snake_pieces)
+    
+    return score, grid, food, snake, game_over, dificulty_choose, beat_the_game_message
 
 def main():
     screen, clock = init()
-    score, grid, food, snake, game_over, dificulty_choose = init_objects()
+    score, grid, food, snake, game_over, dificulty_choose, beat_the_game_message = init_objects()
     
     done = False
     is_game_over = False
     must_choose_dificulty = True
     paused = False
+    won_the_game = False
     
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 done = True
                 
-            elif is_game_over and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                score, grid, food, snake, game_over, dificulty_choose = init_objects()
+            elif (is_game_over or won_the_game) and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                score, grid, food, snake, game_over, dificulty_choose, beat_the_game_message = init_objects()
                 is_game_over = False
-                must_choose_dificulty = True  
+                won_the_game = False
+                must_choose_dificulty = True
                 
             elif must_choose_dificulty and event.type == pygame.KEYDOWN and event.key in properties.DIFICULTY_OPTIONS:
                 dificulty_choose.set_dificulty(event.key)
@@ -77,7 +83,9 @@ def main():
             screen.fill(colors.DARK_GREY)            
             
             if must_choose_dificulty:
-                dificulty_choose.draw(screen)              
+                dificulty_choose.draw(screen)    
+            elif won_the_game:
+                beat_the_game_message.draw(screen, score.score, score.get_higher_scores())                
             elif is_game_over:
                 game_over.draw(screen, score.score, score.get_higher_scores())
             else:
@@ -89,9 +97,13 @@ def main():
                     continue
                 
                 if snake.ate(food):
-                    food.set_position(snake.snake_pieces)
-                    snake.increase_size()
-                    score.improve()
+                    if snake.beat_the_game():
+                        won_the_game = True
+                        continue
+                    else:
+                        food.set_position(snake.snake_pieces)
+                        snake.must_increase = True
+                        score.improve()
                 
                 score.draw(screen)
                 grid.draw_border_only(screen)    

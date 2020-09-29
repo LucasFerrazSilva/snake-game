@@ -19,7 +19,8 @@ class Dificulty_Choose_Screen:
             '1 - Very Easy',
             '2 - Easy',
             '3 - Normal',
-            '4 - Hard'
+            '4 - Hard',
+            '5 - Very Hard'
         ]
         
         option_count = 1
@@ -46,5 +47,8 @@ class Dificulty_Choose_Screen:
               
         elif dificulty_input in [pygame.K_4, pygame.K_KP4]:
             dificulty_option = Dificulty_Options.HARD
+              
+        elif dificulty_input in [pygame.K_5, pygame.K_KP5]:
+            dificulty_option = Dificulty_Options.VERY_HARD
             
         properties.SNAKE_SPEED = dificulty_option.value
